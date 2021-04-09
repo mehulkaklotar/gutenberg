@@ -30,6 +30,10 @@
 		"showSubmenuIcon": {
 			"type": "boolean",
 			"default": true
+		},
+		"responsiveNavigation": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"providesContext": {
@@ -41,7 +45,8 @@
 		"customFontSize": "customFontSize",
 		"showSubmenuIcon": "showSubmenuIcon",
 		"style": "style",
-		"orientation": "orientation"
+		"orientation": "orientation",
+		"responsiveNavigation": "responsiveNavigation"
 	},
 	"supports": {
 		"align": [ "wide", "full" ],
