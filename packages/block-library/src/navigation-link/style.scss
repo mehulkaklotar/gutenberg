@@ -95,6 +95,8 @@
 			flex-direction: column;
 			align-items: normal;
 			min-width: 200px;
+			left: 0;
+			top: 100%;
 
 			// Hide until hover or focus within.
 			opacity: 0;
@@ -175,6 +177,17 @@
 		}
 	}
 
+	// Styles for the open modal.
+	// Even if the modal is set to open only on mobile, you might still
+	// resize the viewport and see the open on desktop sizes.
+	// For that reason, we need extra specificity for when it's open.
+	.is-menu-open .wp-block-navigation__responsive-container-content {
+		.has-child .submenu-container,
+		.has-child .wp-block-navigation-link__container {
+			left: 0%;
+			top: 0;
+		}
+	}
 
 	// When justified space-between, open submenus leftward for last menu item.
 	// When justified right, open all submenus leftwards.
