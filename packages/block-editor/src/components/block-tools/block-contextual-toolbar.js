@@ -39,7 +39,6 @@ function BlockContextualToolbar( {
 			hasParents: getBlockParents( selectedBlockClientId ).length,
 		};
 	}, [] );
-
 	if ( blockType ) {
 		if ( ! hasBlockSupport( blockType, '__experimentalToolbar', true ) ) {
 			return null;
