@@ -38,7 +38,6 @@ function HeaderToolbar() {
 		isInserterEnabled,
 		isInserterOpened,
 		isTextModeEnabled,
-		previewDeviceType,
 		showIconLabels,
 		isNavigationTool,
 	} = useSelect( ( select ) => {
@@ -59,9 +58,6 @@ function HeaderToolbar() {
 			isInserterOpened: select( editPostStore ).isInserterOpened(),
 			isTextModeEnabled:
 				select( editPostStore ).getEditorMode() === 'text',
-			previewDeviceType: select(
-				editPostStore
-			).__experimentalGetPreviewDeviceType(),
 			showIconLabels: select( editPostStore ).isFeatureActive(
 				'showIconLabels'
 			),
@@ -73,14 +69,8 @@ function HeaderToolbar() {
 	const isSmallViewport = useViewportMatch( 'small', '<' );
 	const { setNavigationMode } = useDispatch( blockEditorStore );
 
-	const displayBlockToolbar =
-		! isLargeViewport || previewDeviceType !== 'Desktop';
-
-	const toolbarAriaLabel = displayBlockToolbar
-		? /* translators: accessibility text for the editor toolbar when Top Toolbar is on */
-		  __( 'Document and block tools' )
-		: /* translators: accessibility text for the editor toolbar when Top Toolbar is off */
-		  __( 'Document tools' );
+	/* translators: accessibility text for the editor toolbar */
+	const toolbarAriaLabel = __( 'Document tools' );
 
 	const onSwitchMode = ( mode ) => {
 		setNavigationMode( mode === 'edit' ? false : true );

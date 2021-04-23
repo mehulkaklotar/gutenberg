@@ -18,6 +18,7 @@ _This package assumes that your code will run in an **ES2015+** environment. If 
 import {
 	BlockEditorProvider,
 	BlockList,
+	BlockToolbar,
 	WritingFlow,
 	ObserveTyping,
 } from '@wordpress/block-editor';
@@ -34,7 +35,7 @@ function MyEditorComponent() {
 			onChange={ ( blocks ) => updateBlocks( blocks ) }
 		>
 			<SlotFillProvider>
-				<Popover.Slot name="block-toolbar" />
+				<BlockToolbar />
 				<WritingFlow>
 					<ObserveTyping>
 						<BlockList />

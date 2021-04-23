@@ -11,6 +11,7 @@ import { useSelect } from '@wordpress/data';
 import { useMemo, createPortal } from '@wordpress/element';
 import {
 	BlockList,
+	BlockToolbar,
 	BlockSelectionClearer,
 	BlockInspector,
 	ObserveTyping,
@@ -79,7 +80,7 @@ export default function SidebarBlockEditor( {
 					/>
 
 					<div className="customize-widgets__contextual-toolbar-wrapper">
-						<Popover.Slot name="block-toolbar" />
+						<BlockToolbar />
 					</div>
 
 					<BlockSelectionClearer>

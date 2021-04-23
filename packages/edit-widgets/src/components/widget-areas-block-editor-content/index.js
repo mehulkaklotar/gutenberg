@@ -1,9 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { Popover } from '@wordpress/components';
 import {
 	BlockList,
+	BlockToolbar,
 	BlockEditorKeyboardShortcuts,
 	BlockSelectionClearer,
 	WritingFlow,
@@ -26,7 +26,7 @@ export default function WidgetAreasBlockEditorContent( {
 			<KeyboardShortcuts />
 			<BlockEditorKeyboardShortcuts />
 			<Notices />
-			<Popover.Slot name="block-toolbar" />
+			<BlockToolbar />
 			<BlockSelectionClearer>
 				<WritingFlow>
 					<ObserveTyping>
