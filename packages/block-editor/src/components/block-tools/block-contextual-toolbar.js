@@ -17,7 +17,12 @@ import NavigableToolbar from '../navigable-toolbar';
 import BlockToolbar from '../block-toolbar';
 import { store as blockEditorStore } from '../../store';
 
-function BlockContextualToolbar( { focusOnMount, className, ...props } ) {
+function BlockContextualToolbar( {
+	focusOnMount,
+	className,
+	hideDragHandle,
+	...props
+} ) {
 	const { blockType, hasParents } = useSelect( ( select ) => {
 		const {
 			getBlockName,
@@ -58,7 +63,7 @@ function BlockContextualToolbar( { focusOnMount, className, ...props } ) {
 			aria-label={ __( 'Block tools' ) }
 			{ ...props }
 		>
-			<BlockToolbar />
+			<BlockToolbar hideDragHandle={ hideDragHandle } />
 		</NavigableToolbar>
 	);
 }

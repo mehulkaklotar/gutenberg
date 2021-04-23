@@ -20,7 +20,7 @@ export default function UnifiedBlockToolbar() {
 		return (
 			<>
 				<Popover.Slot name="block-toolbar" />
-				<BlockContextualToolbar className="is-fixed" />
+				<BlockContextualToolbar hideDragHandle className="is-fixed" />
 			</>
 		);
 	}

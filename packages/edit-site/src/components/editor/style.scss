@@ -27,7 +27,11 @@
 	iframe {
 		display: block;
 		width: 100%;
-		height: calc(100% - #{ $block-toolbar-height });
+		height: 100%;
 		background-color: $white;
+	}
+
+	.block-editor-block-contextual-toolbar.is-fixed ~ iframe {
+		height: calc(100% - #{ $block-toolbar-height });
 	}
 }
