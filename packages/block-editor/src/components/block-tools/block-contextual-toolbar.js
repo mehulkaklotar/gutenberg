@@ -18,7 +18,7 @@ import BlockToolbar from '../block-toolbar';
 import { store as blockEditorStore } from '../../store';
 
 function BlockContextualToolbar( { focusOnMount, className, ...props } ) {
-	const { blockType, hasSelection, hasParents } = useSelect( ( select ) => {
+	const { blockType, hasParents } = useSelect( ( select ) => {
 		const {
 			getBlockName,
 			getBlockParents,
@@ -31,14 +31,9 @@ function BlockContextualToolbar( { focusOnMount, className, ...props } ) {
 			blockType:
 				selectedBlockClientId &&
 				getBlockType( getBlockName( selectedBlockClientId ) ),
-			hasSelection: selectedBlockClientIds.length,
 			hasParents: getBlockParents( selectedBlockClientId ).length,
 		};
 	}, [] );
-
-	if ( ! hasSelection ) {
-		return null;
-	}
 
 	if ( blockType ) {
 		if ( ! hasBlockSupport( blockType, '__experimentalToolbar', true ) ) {

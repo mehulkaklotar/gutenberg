@@ -129,6 +129,9 @@
 		top: 0;
 		width: 100%;
 		z-index: z-index(".block-editor-block-list__block-popover");
+		// Fill up when empty
+		min-height: $block-toolbar-height;
+		display: block;
 
 		border: none;
 		border-bottom: $border-width solid $gray-200;
