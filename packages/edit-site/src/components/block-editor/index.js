@@ -11,6 +11,7 @@ import {
 	BlockInspector,
 	WritingFlow,
 	BlockList,
+	BlockToolbar,
 	__experimentalUseResizeCanvas as useResizeCanvas,
 	__unstableUseBlockSelectionClearer as useBlockSelectionClearer,
 	__unstableUseTypingObserver as useTypingObserver,
@@ -18,7 +19,6 @@ import {
 	__unstableEditorStyles as EditorStyles,
 	__unstableIframe as Iframe,
 } from '@wordpress/block-editor';
-import { Popover } from '@wordpress/components';
 import { useMergeRefs } from '@wordpress/compose';
 
 /**
@@ -93,7 +93,7 @@ export default function BlockEditor( { setIsInserterOpen } ) {
 				<BlockInspector />
 			</SidebarInspectorFill>
 			<div className="edit-site-visual-editor" onWheel={ onWheel }>
-				<Popover.Slot name="block-toolbar" />
+				<BlockToolbar />
 				<Iframe
 					style={ resizedCanvasStyles }
 					headHTML={ window.__editorStyles.html }

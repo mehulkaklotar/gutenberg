@@ -124,6 +124,22 @@
 		border-right-color: $gray-900;
 	}
 
+	&.is-fixed {
+		position: sticky;
+		top: 0;
+		width: 100%;
+		z-index: z-index(".block-editor-block-list__block-popover");
+
+		border: none;
+		border-bottom: $border-width solid $gray-200;
+		border-radius: 0;
+
+		.block-editor-block-toolbar .components-toolbar-group,
+		.block-editor-block-toolbar .components-toolbar {
+			border-right-color: $gray-200;
+		}
+	}
+
 	.block-editor-block-mover-button {
 		overflow: hidden;
 	}

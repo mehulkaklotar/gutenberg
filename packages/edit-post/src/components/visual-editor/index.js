@@ -14,6 +14,7 @@ import {
 import {
 	WritingFlow,
 	BlockList,
+	BlockToolbar,
 	store as blockEditorStore,
 	__unstableUseBlockSelectionClearer as useBlockSelectionClearer,
 	__unstableUseTypewriter as useTypewriter,
@@ -26,7 +27,7 @@ import {
 	__experimentalUseEditorFeature as useEditorFeature,
 	__experimentalLayoutStyle as LayoutStyle,
 } from '@wordpress/block-editor';
-import { Popover, Button } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useMergeRefs } from '@wordpress/compose';
@@ -117,7 +118,7 @@ export default function VisualEditor( { styles } ) {
 			) }
 			<EditorStyles styles={ styles } />
 			<VisualEditorGlobalKeyboardShortcuts />
-			<Popover.Slot name="block-toolbar" />
+			<BlockToolbar />
 			{ isTemplateMode && (
 				<Button
 					className="edit-post-visual-editor__exit-template-mode"
