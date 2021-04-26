@@ -23,15 +23,13 @@
 .edit-site-visual-editor {
 	position: relative;
 	height: 100%;
+	display: flex;
+	flex-flow: column;
 
 	iframe {
 		display: block;
 		width: 100%;
 		height: 100%;
 		background-color: $white;
-	}
-
-	.block-editor-block-contextual-toolbar.is-fixed ~ iframe {
-		height: calc(100% - #{ $block-toolbar-height });
 	}
 }
