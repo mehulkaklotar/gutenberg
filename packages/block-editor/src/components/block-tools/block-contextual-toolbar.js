@@ -17,12 +17,7 @@ import NavigableToolbar from '../navigable-toolbar';
 import BlockToolbar from '../block-toolbar';
 import { store as blockEditorStore } from '../../store';
 
-function BlockContextualToolbar( {
-	focusOnMount,
-	className,
-	hideDragHandle,
-	...props
-} ) {
+function BlockContextualToolbar( { focusOnMount, isFixed, ...props } ) {
 	const { blockType, hasParents } = useSelect( ( select ) => {
 		const {
 			getBlockName,
@@ -46,13 +41,10 @@ function BlockContextualToolbar( {
 	}
 
 	// Shifts the toolbar to make room for the parent block selector.
-	const classes = classnames(
-		'block-editor-block-contextual-toolbar',
-		className,
-		{
-			'has-parent': hasParents,
-		}
-	);
+	const classes = classnames( 'block-editor-block-contextual-toolbar', {
+		'has-parent': hasParents,
+		'is-fixed': isFixed,
+	} );
 
 	return (
 		<NavigableToolbar
@@ -62,7 +54,7 @@ function BlockContextualToolbar( {
 			aria-label={ __( 'Block tools' ) }
 			{ ...props }
 		>
-			<BlockToolbar hideDragHandle={ hideDragHandle } />
+			<BlockToolbar hideDragHandle={ isFixed } />
 		</NavigableToolbar>
 	);
 }
