@@ -3,7 +3,7 @@
  */
 import {
 	BlockList,
-	BlockToolbar,
+	BlockTools,
 	BlockEditorKeyboardShortcuts,
 	BlockSelectionClearer,
 	WritingFlow,
@@ -26,14 +26,15 @@ export default function WidgetAreasBlockEditorContent( {
 			<KeyboardShortcuts />
 			<BlockEditorKeyboardShortcuts />
 			<Notices />
-			<BlockToolbar />
-			<BlockSelectionClearer>
-				<WritingFlow>
-					<ObserveTyping>
-						<BlockList className="edit-widgets-main-block-list" />
-					</ObserveTyping>
-				</WritingFlow>
-			</BlockSelectionClearer>
+			<BlockTools>
+				<BlockSelectionClearer>
+					<WritingFlow>
+						<ObserveTyping>
+							<BlockList className="edit-widgets-main-block-list" />
+						</ObserveTyping>
+					</WritingFlow>
+				</BlockSelectionClearer>
+			</BlockTools>
 		</div>
 	);
 }

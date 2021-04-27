@@ -11,7 +11,7 @@ import {
 	BlockInspector,
 	WritingFlow,
 	BlockList,
-	BlockToolbar,
+	BlockTools,
 	__experimentalUseResizeCanvas as useResizeCanvas,
 	__unstableUseBlockSelectionClearer as useBlockSelectionClearer,
 	__unstableUseTypingObserver as useTypingObserver,
@@ -93,25 +93,26 @@ export default function BlockEditor( { setIsInserterOpen } ) {
 				<BlockInspector />
 			</SidebarInspectorFill>
 			<div className="edit-site-visual-editor" onWheel={ onWheel }>
-				<BlockToolbar />
-				<Iframe
-					style={ resizedCanvasStyles }
-					headHTML={ window.__editorStyles.html }
-					head={ <EditorStyles styles={ settings.styles } /> }
-					ref={ ref }
-					contentRef={ mergedRefs }
-				>
-					<WritingFlow>
-						<BlockList
-							className="edit-site-block-editor__block-list"
-							__experimentalLayout={ {
-								type: 'default',
-								// At the root level of the site editor, no alignments should be allowed.
-								alignments: [],
-							} }
-						/>
-					</WritingFlow>
-				</Iframe>
+				<BlockTools>
+					<Iframe
+						style={ resizedCanvasStyles }
+						headHTML={ window.__editorStyles.html }
+						head={ <EditorStyles styles={ settings.styles } /> }
+						ref={ ref }
+						contentRef={ mergedRefs }
+					>
+						<WritingFlow>
+							<BlockList
+								className="edit-site-block-editor__block-list"
+								__experimentalLayout={ {
+									type: 'default',
+									// At the root level of the site editor, no alignments should be allowed.
+									alignments: [],
+								} }
+							/>
+						</WritingFlow>
+					</Iframe>
+				</BlockTools>
 			</div>
 		</BlockEditorProvider>
 	);

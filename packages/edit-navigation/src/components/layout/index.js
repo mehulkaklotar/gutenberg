@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import {
 	BlockEditorKeyboardShortcuts,
 	BlockEditorProvider,
-	BlockToolbar,
+	BlockTools,
 	__unstableUseBlockSelectionClearer as useBlockSelectionClearer,
 } from '@wordpress/block-editor';
 import { Popover, SlotFillProvider, Spinner } from '@wordpress/components';
@@ -179,8 +179,7 @@ export default function Layout( { blockEditorSettings } ) {
 												/>
 											) }
 										{ isBlockEditorReady && (
-											<>
-												<BlockToolbar />
+											<BlockTools>
 												<div
 													className="edit-navigation-layout__content-area"
 													ref={ contentAreaRef }
@@ -216,7 +215,7 @@ export default function Layout( { blockEditorSettings } ) {
 														}
 													/>
 												</div>
-											</>
+											</BlockTools>
 										) }
 									</>
 								}

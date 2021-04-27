@@ -14,7 +14,7 @@ import {
 import {
 	WritingFlow,
 	BlockList,
-	BlockToolbar,
+	BlockTools,
 	store as blockEditorStore,
 	__unstableUseBlockSelectionClearer as useBlockSelectionClearer,
 	__unstableUseTypewriter as useTypewriter,
@@ -118,51 +118,52 @@ export default function VisualEditor( { styles } ) {
 			) }
 			<EditorStyles styles={ styles } />
 			<VisualEditorGlobalKeyboardShortcuts />
-			<BlockToolbar />
-			{ isTemplateMode && (
-				<Button
-					className="edit-post-visual-editor__exit-template-mode"
-					icon={ arrowLeft }
-					onClick={ () => setIsEditingTemplate( false ) }
-				>
-					{ __( 'Back' ) }
-				</Button>
-			) }
-			<motion.div
-				ref={ mergedRefs }
-				className="editor-styles-wrapper"
-				animate={ animatedStyles }
-				initial={ desktopCanvasStyles }
-			>
-				<AnimatePresence>
-					<motion.div
-						key={ isTemplateMode ? 'template' : 'post' }
-						initial={ { opacity: 0 } }
-						animate={ { opacity: 1 } }
+			<BlockTools>
+				{ isTemplateMode && (
+					<Button
+						className="edit-post-visual-editor__exit-template-mode"
+						icon={ arrowLeft }
+						onClick={ () => setIsEditingTemplate( false ) }
 					>
-						<WritingFlow>
-							{ ! isTemplateMode && (
-								<div className="edit-post-visual-editor__post-title-wrapper">
-									<PostTitle />
-								</div>
-							) }
-							<BlockList
-								__experimentalLayout={
-									themeSupportsLayout
-										? {
-												type: 'default',
-												// Find a way to inject this in the support flag code (hooks).
-												alignments: themeSupportsLayout
-													? alignments
-													: undefined,
-										  }
-										: undefined
-								}
-							/>
-						</WritingFlow>
-					</motion.div>
-				</AnimatePresence>
-			</motion.div>
+						{ __( 'Back' ) }
+					</Button>
+				) }
+				<motion.div
+					ref={ mergedRefs }
+					className="editor-styles-wrapper"
+					animate={ animatedStyles }
+					initial={ desktopCanvasStyles }
+				>
+					<AnimatePresence>
+						<motion.div
+							key={ isTemplateMode ? 'template' : 'post' }
+							initial={ { opacity: 0 } }
+							animate={ { opacity: 1 } }
+						>
+							<WritingFlow>
+								{ ! isTemplateMode && (
+									<div className="edit-post-visual-editor__post-title-wrapper">
+										<PostTitle />
+									</div>
+								) }
+								<BlockList
+									__experimentalLayout={
+										themeSupportsLayout
+											? {
+													type: 'default',
+													// Find a way to inject this in the support flag code (hooks).
+													alignments: themeSupportsLayout
+														? alignments
+														: undefined,
+											  }
+											: undefined
+									}
+								/>
+							</WritingFlow>
+						</motion.div>
+					</AnimatePresence>
+				</motion.div>
+			</BlockTools>
 			<__experimentalBlockSettingsMenuFirstItem>
 				{ ( { onClose } ) => (
 					<BlockInspectorButton onClick={ onClose } />

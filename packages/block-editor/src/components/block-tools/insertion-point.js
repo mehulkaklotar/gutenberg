@@ -205,7 +205,7 @@ function InsertionPointPopover() {
 			getAnchorRect={ getAnchorRect }
 			focusOnMount={ false }
 			className="block-editor-block-list__insertion-point-popover"
-			__unstableSlotName="block-toolbar"
+			__unstableSlotName={ null }
 		>
 			<div
 				ref={ ref }
