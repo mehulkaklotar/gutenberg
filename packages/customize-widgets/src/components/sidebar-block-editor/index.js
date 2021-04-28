@@ -11,7 +11,7 @@ import { useSelect } from '@wordpress/data';
 import { useMemo, createPortal } from '@wordpress/element';
 import {
 	BlockList,
-	BlockToolbar,
+	BlockTools,
 	BlockSelectionClearer,
 	BlockInspector,
 	ObserveTyping,
@@ -79,17 +79,15 @@ export default function SidebarBlockEditor( {
 						setIsInserterOpened={ setIsInserterOpened }
 					/>
 
-					<div className="customize-widgets__contextual-toolbar-wrapper">
-						<BlockToolbar />
-					</div>
-
-					<BlockSelectionClearer>
-						<WritingFlow>
-							<ObserveTyping>
-								<BlockList />
-							</ObserveTyping>
-						</WritingFlow>
-					</BlockSelectionClearer>
+					<BlockTools>
+						<BlockSelectionClearer>
+							<WritingFlow>
+								<ObserveTyping>
+									<BlockList />
+								</ObserveTyping>
+							</WritingFlow>
+						</BlockSelectionClearer>
+					</BlockTools>
 
 					{ createPortal(
 						// This is a temporary hack to prevent button component inside <BlockInspector>
