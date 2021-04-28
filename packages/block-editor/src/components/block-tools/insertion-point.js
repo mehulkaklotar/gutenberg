@@ -24,7 +24,7 @@ import Inserter from '../inserter';
 import { store as blockEditorStore } from '../../store';
 import { __unstableUseBlockElement as useBlockElement } from '../block-list/use-block-props/use-block-refs';
 
-export const InsertionPointOpenRef = createContext();
+export const InsertionPointOpenRef = createContext( {} );
 
 function InsertionPointPopover() {
 	const { selectBlock } = useDispatch( blockEditorStore );

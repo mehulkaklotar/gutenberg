@@ -14,9 +14,9 @@ import { store as blockEditorStore } from '../../store';
 import BlockContextualToolbar from './block-contextual-toolbar';
 
 /**
- * Renders block tools (the block toolbar, the insertion point and a slot for
- * the inline rich text toolbar). Must be wrapped around the block content and
- * editor styles wrapper or iframe.
+ * Renders block tools (the block toolbar, select/navigation mode toolbar, the
+ * insertion point and a slot for the inline rich text toolbar). Must be wrapped
+ * around the block content and editor styles wrapper or iframe.
  *
  * @param {Object} $0          Props.
  * @param {Object} $0.children The block content and style container.
@@ -30,11 +30,12 @@ export default function BlockTools( { children } ) {
 
 	return (
 		<InsertionPoint>
-			{ hasFixedToolbar || ! isLargeViewport ? (
+			{ ( hasFixedToolbar || ! isLargeViewport ) && (
 				<BlockContextualToolbar isFixed />
-			) : (
-				<BlockPopover />
 			) }
+			{ /* Even if the toolbar is fixed, the block popover is still
+                 needed for navigation mode. */ }
+			<BlockPopover />
 			{ /* Used for the inline rich text toolbar. */ }
 			<Popover.Slot name="block-toolbar" />
 			{ children }
