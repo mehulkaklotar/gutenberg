@@ -159,29 +159,23 @@
 }
 
 // Position mover arrows for both toolbars.
-.block-editor-block-contextual-toolbar,
-.edit-post-header-toolbar__block-toolbar,
-.edit-site-header-toolbar__block-toolbar,
-.edit-navigation-layout__block-toolbar,
-.edit-widgets-header__block-toolbar {
-	.block-editor-block-mover:not(.is-horizontal) {
-		// Position SVGs.
-		.block-editor-block-mover-button {
-			&:focus::before {
-				left: 0 !important;
-				min-width: 0;
-				width: 100%;
-			}
+.block-editor-block-contextual-toolbar .block-editor-block-mover:not(.is-horizontal) {
+	// Position SVGs.
+	.block-editor-block-mover-button {
+		&:focus::before {
+			left: 0 !important;
+			min-width: 0;
+			width: 100%;
+		}
+	}
+
+	@include break-small() {
+		.block-editor-block-mover-button.is-up-button svg {
+			top: 5px;
 		}
 
-		@include break-small() {
-			.block-editor-block-mover-button.is-up-button svg {
-				top: 5px;
-			}
-
-			.block-editor-block-mover-button.is-down-button svg {
-				bottom: 5px;
-			}
+		.block-editor-block-mover-button.is-down-button svg {
+			bottom: 5px;
 		}
 	}
 }
@@ -252,7 +246,6 @@
 		padding: 0;
 	}
 }
-
 
 /**
  * Popovers.
