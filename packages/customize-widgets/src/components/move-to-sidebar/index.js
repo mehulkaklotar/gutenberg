@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { without } from 'lodash';
+
+/**
  * WordPress dependencies
  */
 import {
@@ -11,11 +16,32 @@ import {
 import { __ } from '@wordpress/i18n';
 import { moveTo } from '@wordpress/icons';
 
-export default function MoveToSidebar( {
-	currentSidebar,
-	sidebars,
-	onSelect,
-} ) {
+/**
+ * Internal dependencies
+ */
+import {
+	useSidebarControls,
+	useActiveSidebarControl,
+} from '../sidebar-controls';
+
+export default function MoveToSidebar( { widgetId } ) {
+	const sidebarControls = useSidebarControls();
+	const activeSidebarControl = useActiveSidebarControl();
+
+	function moveToSidebar( sidebarControlId ) {
+		const newSidebarControl = sidebarControls.find(
+			( sidebarControl ) => sidebarControl.id === sidebarControlId
+		);
+
+		const oldSetting = activeSidebarControl.setting;
+		const newSetting = newSidebarControl.setting;
+
+		oldSetting( without( oldSetting(), widgetId ) );
+		newSetting( [ ...newSetting(), widgetId ] );
+
+		newSidebarControl.expand();
+	}
+
 	return (
 		<ToolbarGroup>
 			<ToolbarItem>
@@ -28,14 +54,18 @@ export default function MoveToSidebar( {
 						{ ( { onClose } ) => (
 							<MenuGroup label={ __( 'Move to' ) }>
 								<MenuItemsChoice
-									choices={ sidebars.map( ( sidebar ) => ( {
-										value: sidebar.id,
-										label: sidebar.name,
-										info: sidebar.description,
-									} ) ) }
-									value={ currentSidebar?.id }
-									onSelect={ ( value ) => {
-										onSelect( value );
+									choices={ sidebarControls.map(
+										( sidebarControl ) => ( {
+											value: sidebarControl.id,
+											label: sidebarControl.params.label,
+											info:
+												sidebarControl.params
+													.description,
+										} )
+									) }
+									value={ activeSidebarControl?.id }
+									onSelect={ ( sidebarControlId ) => {
+										moveToSidebar( sidebarControlId );
 										onClose();
 									} }
 								/>
