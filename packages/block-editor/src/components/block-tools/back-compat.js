@@ -10,14 +10,6 @@ import deprecated from '@wordpress/deprecated';
 import InsertionPoint, { InsertionPointOpenRef } from './insertion-point';
 import BlockPopover from './block-popover';
 
-/**
- * Renders block tools (the block toolbar, select/navigation mode toolbar, the
- * insertion point and a slot for the inline rich text toolbar). Must be wrapped
- * around the block content and editor styles wrapper or iframe.
- *
- * @param {Object} $0          Props.
- * @param {Object} $0.children The block content and style container.
- */
 export default function BlockToolsBackCompat( { children } ) {
 	const openRef = useContext( InsertionPointOpenRef );
 
