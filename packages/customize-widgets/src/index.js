@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { render } from '@wordpress/element';
 import {
 	registerCoreBlocks,
 	__experimentalGetCoreBlocks,
@@ -10,6 +11,7 @@ import {
 /**
  * Internal dependencies
  */
+import CustomizeWidgets from './components/customize-widgets';
 import getSidebarSection from './controls/sidebar-section';
 import getSidebarControl from './controls/sidebar-control';
 import './filters';
@@ -34,8 +36,29 @@ export function initialize( editorName, blockEditorSettings ) {
 		} );
 	}
 
+	const SidebarControl = getSidebarControl( blockEditorSettings );
+
 	wp.customize.sectionConstructor.sidebar = getSidebarSection();
-	wp.customize.controlConstructor.sidebar_block_editor = getSidebarControl(
-		blockEditorSettings
-	);
+	wp.customize.controlConstructor.sidebar_block_editor = SidebarControl;
+
+	const container = document.createElement( 'div' );
+	document.body.appendChild( container );
+
+	wp.customize.bind( 'ready', () => {
+		const sidebarControls = [];
+		wp.customize.control.each( ( control ) => {
+			if ( control instanceof SidebarControl ) {
+				sidebarControls.push( control );
+			}
+		} );
+
+		render(
+			<CustomizeWidgets
+				api={ wp.customize }
+				sidebarControls={ sidebarControls }
+				blockEditorSettings={ blockEditorSettings }
+			/>,
+			container
+		);
+	} );
 }
