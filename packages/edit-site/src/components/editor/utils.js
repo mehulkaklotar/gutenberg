@@ -29,6 +29,15 @@ export const ROOT_BLOCK_SUPPORTS = [
 	'textDecoration',
 	'textTransform',
 ];
+export const ELEMENTS = {
+	link: 'a',
+	h1: 'h1',
+	h2: 'h2',
+	h3: 'h3',
+	h4: 'h4',
+	h5: 'h5',
+	h6: 'h6',
+};
 
 export const PRESET_METADATA = [
 	{
@@ -96,23 +105,16 @@ function getPresetMetadataFromStyleProperty( styleProperty ) {
 export const LINK_COLOR = '--wp--style--color--link';
 export const LINK_COLOR_DECLARATION = `a { color: var(${ LINK_COLOR }, #00e); }`;
 
-export function useEditorFeature( featurePath, blockName = ALL_BLOCKS_NAME ) {
+export function useEditorFeature( featurePath, blockName = '' ) {
 	const settings = useSelect( ( select ) => {
 		return select( editSiteStore ).getSettings();
 	} );
-	return (
-		get(
-			settings,
-			`__experimentalFeatures.${ blockName }.${ featurePath }`
-		) ??
-		get(
-			settings,
-			`__experimentalFeatures.${ ALL_BLOCKS_NAME }.${ featurePath }`
-		)
-	);
+	const topLevelPath = `__experimentalFeatures.${ featurePath }`;
+	const blockPath = `__experimentalFeatures.blocks.${ blockName }.${ featurePath }`;
+	return get( settings, blockPath ) ?? get( settings, topLevelPath );
 }
 
-export function getPresetVariable( styles, blockName, propertyName, value ) {
+export function getPresetVariable( styles, stylePath, propertyName, value ) {
 	if ( ! value ) {
 		return value;
 	}
@@ -121,9 +123,7 @@ export function getPresetVariable( styles, blockName, propertyName, value ) {
 		return value;
 	}
 	const { valueKey, path, cssVarInfix } = presetData;
-	const presets =
-		get( styles, [ 'settings', blockName, ...path ] ) ??
-		get( styles, [ 'settings', ALL_BLOCKS_NAME, ...path ] );
+	const presets = get( styles, [ ...stylePath, ...path ] );
 	const presetObject = find( presets, ( preset ) => {
 		return preset[ valueKey ] === value;
 	} );

@@ -1,7 +1,17 @@
 /**
  * External dependencies
  */
-import { capitalize, get, kebabCase, reduce, startsWith } from 'lodash';
+import {
+	capitalize,
+	forEach,
+	get,
+	isEmpty,
+	kebabCase,
+	pickBy,
+	reduce,
+	set,
+	startsWith,
+} from 'lodash';
 
 /**
  * WordPress dependencies
@@ -11,7 +21,7 @@ import { __EXPERIMENTAL_STYLE_PROPERTY as STYLE_PROPERTY } from '@wordpress/bloc
 /**
  * Internal dependencies
  */
-import { LINK_COLOR_DECLARATION, PRESET_METADATA } from './utils';
+import { PRESET_METADATA, ROOT_BLOCK_SELECTOR, ELEMENTS } from './utils';
 
 function compileStyleValue( uncompiledValue ) {
 	const VARIABLE_REFERENCE_PREFIX = 'var:';
@@ -34,7 +44,7 @@ function compileStyleValue( uncompiledValue ) {
  *
  * @return {Array} An array of style declarations.
  */
-function getBlockPresetsDeclarations( blockPresets = {} ) {
+function getPresetsDeclarations( blockPresets = {} ) {
 	return reduce(
 		PRESET_METADATA,
 		( declarations, { path, valueKey, cssVarInfix } ) => {
@@ -57,7 +67,7 @@ function getBlockPresetsDeclarations( blockPresets = {} ) {
  * @param {Object} blockPresets
  * @return {string} CSS declarations for the preset classes.
  */
-function getBlockPresetClasses( blockSelector, blockPresets = {} ) {
+function getPresetsClasses( blockSelector, blockPresets = {} ) {
 	return reduce(
 		PRESET_METADATA,
 		( declarations, { path, valueKey, classes } ) => {
@@ -103,7 +113,7 @@ function flattenTree( input = {}, prefix, token ) {
  *
  * @return {Array} An array of style declarations.
  */
-function getBlockStylesDeclarations( blockStyles = {} ) {
+function getStylesDeclarations( blockStyles = {} ) {
 	return reduce(
 		STYLE_PROPERTY,
 		( declarations, { value, properties }, key ) => {
@@ -140,57 +150,139 @@ function getBlockStylesDeclarations( blockStyles = {} ) {
 	);
 }
 
-export default ( blockData, tree, type = 'all' ) => {
-	return reduce(
-		blockData,
-		( styles, { selector }, context ) => {
-			if ( type === 'all' || type === 'cssVariables' ) {
-				const variableDeclarations = [
-					...getBlockPresetsDeclarations(
-						tree?.settings?.[ context ]
-					),
-					...flattenTree(
-						tree?.settings?.[ context ]?.custom,
-						'--wp--custom--',
-						'--'
-					),
-				];
+export const getNodesWithStyles = ( tree, blockSelectors ) => {
+	const nodes = [];
 
-				if ( variableDeclarations.length > 0 ) {
-					styles.push(
-						`${ selector } { ${ variableDeclarations.join(
-							';'
-						) } }`
-					);
-				}
+	if ( ! tree?.styles ) {
+		return nodes;
+	}
+
+	const pickStyleKeys = ( treeToPickFrom ) =>
+		pickBy( treeToPickFrom, ( value, key ) =>
+			[ 'border', 'color', 'spacing', 'typography' ].includes( key )
+		);
+
+	// Top-level.
+	const styles = pickStyleKeys( tree.styles );
+	if ( !! styles ) {
+		nodes.push( {
+			styles,
+			selector: ROOT_BLOCK_SELECTOR,
+		} );
+	}
+	forEach( tree.styles?.elements, ( value, index ) => {
+		nodes.push( {
+			styles: value,
+			selector: ELEMENTS[ index ],
+		} );
+	} );
+
+	// Iterate over blocks: they can have styles & elements.
+	forEach( tree.styles?.blocks, ( node, blockName ) => {
+		const blockStyles = pickStyleKeys( node );
+		if ( !! blockStyles ) {
+			nodes.push( {
+				styles: blockStyles,
+				selector: blockSelectors[ blockName ].selector,
+			} );
+		}
+
+		forEach( node?.elements, ( value, elementName ) => {
+			nodes.push( {
+				styles: value,
+				selector: blockSelectors[ blockName ].elements[ elementName ],
+			} );
+		} );
+	} );
+
+	return nodes;
+};
+
+export const getNodesWithSettings = ( tree, blockSelectors ) => {
+	const nodes = [];
+
+	if ( ! tree?.settings ) {
+		return nodes;
+	}
+
+	const pickPresets = ( treeToPickFrom ) => {
+		const presets = {};
+		PRESET_METADATA.forEach( ( { path } ) => {
+			const value = get( treeToPickFrom, path, false );
+			if ( value !== false ) {
+				set( presets, path, value );
 			}
-			if ( type === 'all' || type === 'blockStyles' ) {
-				const blockStyleDeclarations = getBlockStylesDeclarations(
-					tree?.styles?.[ context ]
-				);
+		} );
+		return presets;
+	};
 
-				if ( blockStyleDeclarations.length > 0 ) {
-					styles.push(
-						`${ selector } { ${ blockStyleDeclarations.join(
-							';'
-						) } }`
-					);
-				}
+	// Top-level.
+	const presets = pickPresets( tree.settings );
+	if ( ! isEmpty( presets ) ) {
+		nodes.push( {
+			presets,
+			custom: tree.settings?.custom,
+			selector: ROOT_BLOCK_SELECTOR,
+		} );
+	}
 
-				const presetClasses = getBlockPresetClasses(
-					selector,
-					tree?.settings?.[ context ]
-				);
-				if ( presetClasses ) {
-					styles.push( presetClasses );
-				}
-			}
-			return styles;
-		},
-		// Can this be converted to a context, as the global context?
-		// See comment in the server.
-		type === 'all' || type === 'blockStyles'
-			? [ LINK_COLOR_DECLARATION ]
-			: []
-	).join( '' );
+	// Blocks.
+	forEach( tree.settings?.blocks, ( node, blockName ) => {
+		const blockPresets = pickPresets( node );
+		if ( ! isEmpty( blockPresets ) ) {
+			nodes.push( {
+				presets: blockPresets,
+				custom: node.custom,
+				selector: blockSelectors[ blockName ].selector,
+			} );
+		}
+	} );
+
+	return nodes;
+};
+
+export const toCustomProperties = ( tree, blockSelectors ) => {
+	const settings = getNodesWithSettings( tree, blockSelectors );
+
+	let ruleset = '';
+	settings.forEach( ( { presets, custom, selector } ) => {
+		const declarations = getPresetsDeclarations( presets );
+		const customProps = flattenTree( custom, '--wp--custom--', '--' );
+		if ( customProps.length > 0 ) {
+			declarations.push( ...customProps );
+		}
+
+		if ( declarations.length > 0 ) {
+			ruleset = ruleset + `${ selector }{${ declarations.join( ';' ) };}`;
+		}
+	} );
+
+	return ruleset;
+};
+
+export const toStyles = ( tree, blockSelectors ) => {
+	const nodesWithStyles = getNodesWithStyles( tree, blockSelectors );
+	const nodesWithSettings = getNodesWithSettings( tree, blockSelectors );
+
+	let ruleset = '';
+	nodesWithStyles.forEach( ( { selector, styles } ) => {
+		const declarations = getStylesDeclarations( styles );
+		if ( declarations.length > 0 ) {
+			ruleset = ruleset + `${ selector }{${ declarations.join( ';' ) };}`;
+		}
+	} );
+
+	nodesWithSettings.forEach( ( { selector, presets } ) => {
+		if ( ROOT_BLOCK_SELECTOR === selector ) {
+			// Do not add extra specificity for top-level classes.
+			selector = '';
+		}
+
+		const classes = getPresetsClasses( selector, presets );
+		if ( ! isEmpty( classes ) ) {
+			ruleset = ruleset + classes;
+		}
+	} );
+
+	return ruleset;
 };
