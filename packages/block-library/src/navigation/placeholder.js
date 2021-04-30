@@ -8,6 +8,7 @@ import { some } from 'lodash';
  */
 import { createBlock, parse } from '@wordpress/blocks';
 import {
+	Placeholder,
 	Button,
 	DropdownMenu,
 	MenuGroup,
@@ -217,7 +218,7 @@ function NavigationPlaceholder( { onCreate }, ref ) {
 		className: 'wp-block-navigation-placeholder__actions__dropdown',
 	};
 	return (
-		<div className="wp-block-navigation-placeholder">
+		<Placeholder className="wp-block-navigation-placeholder">
 			<PlaceholderPreview />
 
 			<div className="wp-block-navigation-placeholder__controls">
@@ -277,7 +278,7 @@ function NavigationPlaceholder( { onCreate }, ref ) {
 					</div>
 				) }
 			</div>
-		</div>
+		</Placeholder>
 	);
 }
 
